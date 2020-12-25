@@ -92,7 +92,7 @@ func LowNodeActualUtilization(ctx context.Context, client clientset.Interface, s
 		},
 	)
 
-	klog.V(1).InfoS("Criteria for a node under utilization",
+	klog.V(1).InfoS("Criteria for a node under actual utilization",
 		"CPU", thresholds[v1.ResourceCPU], "Mem", thresholds[v1.ResourceMemory], "Pods", thresholds[v1.ResourcePods])
 
 	if len(lowNodes) == 0 {
