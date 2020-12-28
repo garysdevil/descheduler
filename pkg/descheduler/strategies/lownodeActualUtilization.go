@@ -318,7 +318,7 @@ func evictPodsFromTargetNodes1(
 			klog.V(3).InfoS("removablePodsBasedOnPriorityLowToHigh", "order", i, "node", klog.KObj(node.node), "namespace", pod.GetNamespace(), "pod", pod.GetName())
 		}
 		evictPods1(ctx, removablePods, node, totalAvailableUsage, taintsOfLowNodes, podEvictor, metricsClient)
-		
+
 		limitTargetNumber := strategy.Params.NodeResourceActualUtilizationThresholds.LimitNumberOfTargetNodes
 		if i >= limitTargetNumber {
 			klog.V(3).InfoS("Error. Reached maximum number of operating targetNode per time", "limitTargetNumber", limitTargetNumber, "totalTargetNumber", len(targetNodes))
@@ -364,6 +364,10 @@ func evictPods1(
 			memoryQuantity := utils.GetResourceActualQuantity(pod, v1.ResourceMemory, metricsClient)
 
 			klog.V(3).InfoS("Pod Actual Resource Quantity", "pod", klog.KObj(pod), "CPU", cpuQuantity.String(), "Memory", memoryQuantity.String(), "CPU(m)", cpuQuantity.MilliValue(), "Memory(Mi)", memoryQuantity.Value()/1024/1024)
+			if cpuQuantity.MilliValue() == 0 && memoryQuantity.Value() == 0 {
+				klog.V(3).InfoS("Skip this Pod", "pod", klog.KObj(pod), "Reason", "Can not get actual resource usage from metrc-server")
+				continue
+			}
 
 			success, err := podEvictor.EvictPod(ctx, pod, nodeUsage.node, "LowNodeActualUtilization")
 			if err != nil {
