@@ -40,7 +40,7 @@ strategies:
       enabled: true
       params:
         nodeResourceActualUtilizationThresholds:
-          limitNumberOfTargetNodes: 1 # default 1
+          limitNumberOfTargetNodes: 1 # default 0
           excludeOwnerKinds:
           - "Cronjob"
           - "Job"

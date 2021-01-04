@@ -7,7 +7,7 @@ strategies:
       params:
         thresholdPriority: 1000
         nodeResourceActualUtilizationThresholds:
-          limitNumberOfTargetNodes: 1 # default 1
+          limitNumberOfTargetNodes: 1 # default 0, don't handle any node
           excludeOwnerKinds:
           - "Cronjob"
           - "Job"
